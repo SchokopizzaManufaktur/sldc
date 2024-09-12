@@ -13,8 +13,8 @@ test: build
 	python -c 'import sldc ; x = b"test string" ; assert(sldc.decompress(sldc.compress(x)) == x)'
 build: sldc libsldc.so _sldc.so sldc.1.gz sldc.h.3.gz LICENSE
 
-sldc: sldc.c
-	LANG=C gcc $(CFLAGS) $(GLIB2)          -lsldc  -o $@ $^
+sldc: sldc.c libsldc.so
+	LANG=C gcc $(CFLAGS) $(GLIB2) -L. -Wl,-rpath=. -lsldc  -o $@ $^
 libsldc.so: libsldc.c
 	LANG=C gcc $(CFLAGS) $(GLIB2)          -shared -o $@ $^
 _sldc.so: libsldc.c libsldc_wrap.c
